@@ -71,9 +71,10 @@ public class Configuration {
         for (Option option : options.values()) {
             help.append(option.help()).append("\n");
         }
-        help.append("\nECSSL is free/open source software under the GPLv2 license.\n");
-        help.append("Copyright (C) Entrecloud\n");
-        help.append("https://github.com/entrecloud\n");
+        help.append("\n")
+            .append("ECSSL is free/open source software by Entrecloud under GPLv2 and contains libraries under various open source licenses.\n")
+            .append("The source code and more information is available at https://github.com/entrecloud/ecssl\n")
+            .append("\n");
         return help.toString();
     }
 }
