@@ -27,7 +27,8 @@
 ## Abstract
 
 ECSSL is a command line utility to generate certificates with LetsEncrypt, and possibly other ACME-compliant certificate
-authorities. It is developed by the Wordpress Cloud Hosting Provider Entrecloud. (DUH)
+authorities. It is developed by the [Wordpress Cloud Hosting Provider Entrecloud](https://entrecloud.com). If you don't
+want to deal with any of this, maybe you're interested in a hosting plan? :)
 
 ## Installing
 
@@ -36,8 +37,8 @@ To install this software, you need to have either Oracle Java 8 or OpenJDK 8. Ot
 
 ## Running
 
-ECSSL currently supports only one mode, invoked with `--single`, which generates/renews a single SSL certificate. The
-default configuration goes like this:
+ECSSL currently supports only one mode, invoked with `--mode single`, which generates/renews a single SSL certificate.
+The default configuration goes like this:
 
 ```bash
 java -jar ecssl.jar \
@@ -52,6 +53,7 @@ java -jar ecssl.jar \
 ```
 
 That's it! Now it's up to you to wrap a shell script around it to restart your webserver, or however you want to use it.
+No root access needed, no configuration files that can break, just a single executable.
 
 The full list of options can, of course, be show when invoking the client with the `-h` or `--help` flags.
 
@@ -61,12 +63,7 @@ file. It is **strongly** recommended that you back up all your account keys and 
 
 ## Standing on the Shoulders of Giants
 
-This project would not have been possible without these open source projects:
-
-- [ACME4j by Richard Körber](https://github.com/shred/acme4j)
-- [SLF4j](https://www.slf4j.org/)
-- [JSR305 by Google FindBugs](http://findbugs.sourceforge.net/)
-- [JUnit](http://junit.org/)
+This project would not have been possible without [ACME4j by Richard Körber](https://github.com/shred/acme4j).
 
 ## Future Plans
 
