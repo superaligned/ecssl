@@ -1,6 +1,7 @@
 package com.entrecloud.ecssl.acme;
 
 import com.entrecloud.ecssl.configuration.Configuration;
+import com.entrecloud.ecssl.configuration.Option;
 import org.shredzone.acme4j.Registration;
 import org.shredzone.acme4j.RegistrationBuilder;
 import org.shredzone.acme4j.Session;
@@ -48,6 +49,23 @@ public class EnsureRegistration {
             logger.warn("Exception while processing ACME account: " + e.getMessage(), e);
             throw new RuntimeException(e);
         }
+
+        try {
+            String termsUrl = configuration.getOption("agree-terms-url").getValueAsString();
+            URI agreementUri = reg.getAgreement();
+            if (!agreementUri.toString().equals(termsUrl)) {
+                throw new RuntimeException("Invalid terms URL: " + termsUrl + " you must accept " + agreementUri.toString());
+            } else {
+                try {
+                    logger.info("Accepting agreement at " + agreementUri.toString());
+                    reg.modify().setAgreement(agreementUri).commit();
+                } catch (AcmeException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (Option.ConfigurationOptionNotSet e) {
+        }
+
         return reg;
     }
 }

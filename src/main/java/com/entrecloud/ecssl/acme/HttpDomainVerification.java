@@ -6,6 +6,7 @@ import org.shredzone.acme4j.Status;
 import org.shredzone.acme4j.challenge.Challenge;
 import org.shredzone.acme4j.challenge.Http01Challenge;
 import org.shredzone.acme4j.exception.AcmeException;
+import org.shredzone.acme4j.exception.AcmeUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +102,9 @@ public class HttpDomainVerification {
                     delete(webroot + "/.well-known");
                 }
             }
+        } catch (AcmeUnauthorizedException e) {
+            logger.warn("Unauthorized, you probably have to accept the terms at " + registration.getAgreement());
+            throw new RuntimeException("Unauthorized, you probably have to accept the terms at " + registration.getAgreement(), e);
         } catch (AcmeException e) {
             throw new RuntimeException(e);
         }

@@ -23,7 +23,8 @@ public class SingleModule implements Module {
             new Option("ca-file", "File to store the CA certificate in."),
             new Option("chain-file", "File to store the full certificate chain in."),
             new Option("privatekey-file", "File to store the private key in."),
-            new Option("webroot-path", "Webroot for creating the verification file.")
+            new Option("webroot-path", "Webroot for creating the verification file."),
+            new Option("agree-terms-url", "Agree to the terms of service on the specified url.")
         );
     }
 

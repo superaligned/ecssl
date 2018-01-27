@@ -7,7 +7,7 @@
     <groupId>com.entrecloud</groupId>
     <artifactId>ecssl</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <developers>
         <developer>
             <id>janoszen</id>
@@ -81,29 +81,34 @@
     </dependencies>
 
     <build>
+        <finalName>ecssl</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.entrecloud.ecssl.ECSSLApplication</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.entrecloud.ecssl.ECSSLApplication</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>assemble-all</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -113,15 +118,33 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>com.entrecloud.ecssl.ECSSLApplication</mainClass>
-                        </manifest>
-                    </archive>
+                        </transformer>
+                    </transformers>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
