@@ -3,11 +3,16 @@ package com.entrecloud.ecssl.single;
 import com.entrecloud.ecssl.Mode;
 import com.entrecloud.ecssl.acme.*;
 import com.entrecloud.ecssl.configuration.Configuration;
+import org.shredzone.acme4j.Certificate;
 import org.shredzone.acme4j.Registration;
 import org.shredzone.acme4j.Session;
+import org.shredzone.acme4j.util.CSRBuilder;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.security.KeyPair;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @ParametersAreNonnullByDefault
 public class SingleMode implements Mode {
@@ -28,6 +33,8 @@ public class SingleMode implements Mode {
 
         new EnsureDomainVerification().verify(configuration, registration, session);
 
+        Certificate certificate = new RequestCertificate().request(configuration, registration, domainKeyPair);
 
+        new StoreCertificate().store(configuration, certificate);
     }
 }

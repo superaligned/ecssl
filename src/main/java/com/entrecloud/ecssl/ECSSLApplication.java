@@ -3,6 +3,8 @@ package com.entrecloud.ecssl;
 import com.entrecloud.ecssl.configuration.Configuration;
 import com.entrecloud.ecssl.configuration.Option;
 import com.entrecloud.ecssl.single.SingleModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class ECSSLApplication implements Runnable {
+    private final static Logger logger = LoggerFactory.getLogger(ECSSLApplication.class);
     private final List<Module> modules;
     private final Configuration configuration;
     private final String[] argv;
@@ -23,6 +26,7 @@ public class ECSSLApplication implements Runnable {
 
         List<Option> options = new ArrayList<>();
         options.add(new Option("mode", "Set operation mode", "single"));
+        options.add(new Option("log-level", "Set log level (trace, info, warn, error)", "info"));
         for (Module module : modules) {
             options.addAll(module.getOptions());
         }
@@ -38,6 +42,8 @@ public class ECSSLApplication implements Runnable {
         }
 
         configuration.parse(argv);
+
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", configuration.getOption("log-level").getValueAsString());
 
         String modeName = configuration.getOption("mode").getValueAsString();
         List<String> modes = new ArrayList<>();

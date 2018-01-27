@@ -4,14 +4,21 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 public class Configuration {
-    private final Map<String, Option> options;
+    private final SortedMap<String, Option> options;
 
     public Configuration(List<Option> options) {
-        this.options = options.stream().collect(Collectors.toMap(Option::getName, option->option));
+        this.options = options.stream().collect(Collectors.toMap(
+            Option::getName,
+            option->option,
+            (v1, v2) -> { throw new RuntimeException(); },
+            TreeMap::new
+        ));
     }
 
     public void parse(String[] argv) {
