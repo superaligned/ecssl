@@ -15,7 +15,7 @@ public class EnsureDomainVerification {
         String[] domains = configuration.getOption("domains").getValueAsString().split(",");
 
         for (String domain : domains) {
-            logger.info("Attempting to validate domain " + domain + "...");
+            logger.trace("Attempting to validate domain " + domain + "...");
             new HttpDomainVerification(domain, registration, configuration.getOption("webroot-path").getValueAsString()).run();
         }
     }

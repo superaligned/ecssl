@@ -28,7 +28,7 @@ public class EnsureRegistration {
             RegistrationBuilder registrationBuilder = new RegistrationBuilder();
             registrationBuilder.addContact("mailto:" + email);
             reg = registrationBuilder.create(session);
-            logger.info("Registered new ACME account.");
+            logger.trace("Registered new ACME account.");
         } catch (AcmeConflictException ex) {
             reg = Registration.bind(session, ex.getLocation());
             List<String> registeredEmails = reg
@@ -39,7 +39,7 @@ public class EnsureRegistration {
                 .collect(Collectors.toList());
             if (!registeredEmails.contains(email)) {
                 try {
-                    logger.info("Updating ACME account, adding e-mail: " + email);
+                    logger.trace("Updating ACME account, adding e-mail: " + email);
                     reg.modify().addContact("mailto:" + email).commit();
                 } catch (AcmeException e) {
                     throw new RuntimeException(e);
@@ -57,7 +57,7 @@ public class EnsureRegistration {
                 throw new RuntimeException("Invalid terms URL: " + termsUrl + " you must accept " + agreementUri.toString());
             } else {
                 try {
-                    logger.info("Accepting agreement at " + agreementUri.toString());
+                    logger.trace("Accepting agreement at " + agreementUri.toString());
                     reg.modify().setAgreement(agreementUri).commit();
                 } catch (AcmeException e) {
                     throw new RuntimeException(e);

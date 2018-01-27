@@ -25,16 +25,16 @@ public class StoreCertificate {
             File certificateFile = configuration.getOption("certificate-file").getValueAsFile();
             File chainFile = configuration.getOption("chain-file").getValueAsFile();
 
-            logger.info("Downloading certificate...");
+            logger.trace("Downloading certificate...");
             X509Certificate domainCert = certificate.download();
-            logger.info("Downloading ca certificate chain...");
+            logger.trace("Downloading ca certificate chain...");
             X509Certificate[] caChain = certificate.downloadChain();
 
-            logger.info("Storing certificate in " + certificateFile.toString() + "...");
+            logger.trace("Storing certificate in " + certificateFile.toString() + "...");
             CertificateUtils.writeX509Certificate(domainCert, new FileWriter(certificateFile));
-            logger.info("Storing CA certificate chain in " + caFile.toString() + "...");
+            logger.trace("Storing CA certificate chain in " + caFile.toString() + "...");
             CertificateUtils.writeX509CertificateChain(new FileWriter(caFile), null, caChain);
-            logger.info("Storing full chain in " + chainFile.toString() + "...");
+            logger.trace("Storing full chain in " + chainFile.toString() + "...");
             CertificateUtils.writeX509CertificateChain(new FileWriter(chainFile), domainCert, caChain);
         } catch (IOException e) {
             logger.warn("IO exception while storing certificate: " + e.getMessage(), e);

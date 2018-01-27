@@ -18,22 +18,22 @@ public class EnsureDomainKeyPair {
 
     public KeyPair ensureKeyPair(Configuration configuration) {
         File privateKeyfile = configuration.getOption("privatekey-file").getValueAsFile();
-        logger.info("Loading domain private key from " + privateKeyfile.toString() + "...");
+        logger.trace("Loading domain private key from " + privateKeyfile.toString() + "...");
         KeyPair domainKeyPair;
         if (!privateKeyfile.exists()) {
-            logger.info("Private key file does not exist, regenerating...");
+            logger.trace("Private key file does not exist, regenerating...");
             domainKeyPair = KeyPairUtils.createKeyPair(2048);
             try {
                 KeyPairUtils.writeKeyPair(domainKeyPair, new FileWriter(privateKeyfile));
             } catch (IOException e) {
-                logger.info("Exception while trying to write domain private key, aborting...", e);
+                logger.warn("Exception while trying to write domain private key, aborting...", e);
                 throw new RuntimeException(e.getMessage(), e);
             }
         } else {
             try {
                 domainKeyPair = KeyPairUtils.readKeyPair(new FileReader(privateKeyfile));
             } catch (IOException e) {
-                logger.info("Exception while trying to read domain private key, aborting...", e);
+                logger.warn("Exception while trying to read domain private key, aborting...", e);
                 throw new RuntimeException(e.getMessage(), e);
             }
         }

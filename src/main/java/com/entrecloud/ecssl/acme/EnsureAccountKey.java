@@ -14,10 +14,10 @@ public class EnsureAccountKey {
     private final static Logger logger = LoggerFactory.getLogger(EnsureAccountKey.class);
     public KeyPair accountKey(Configuration configuration) {
         File accountKeyFile = configuration.getOption("account-key-file").getValueAsFile();
-        logger.info("Attempting to load ACME account key pair from " + accountKeyFile.toString() + "...");
+        logger.trace("Attempting to load ACME account key pair from " + accountKeyFile.toString() + "...");
         KeyPair userKeyPair;
         if (!accountKeyFile.exists()) {
-            logger.info("Account key does not exist, regenerating...");
+            logger.trace("Account key does not exist, regenerating...");
             userKeyPair = KeyPairUtils.createKeyPair(2048);
             try {
                 KeyPairUtils.writeKeyPair(userKeyPair, new FileWriter(accountKeyFile));

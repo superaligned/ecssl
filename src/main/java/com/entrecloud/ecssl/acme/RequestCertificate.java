@@ -23,7 +23,7 @@ public class RequestCertificate {
         String[] domains = configuration.getOption("domains").getValueAsString().split(",");
 
         try {
-            logger.info("Requesting certificate...");
+            logger.trace("Requesting certificate...");
             CSRBuilder csrb = new CSRBuilder();
             csrb.addDomains(Arrays.asList(domains));
             csrb.sign(domainKeyPair);

@@ -55,21 +55,21 @@ public class HttpDomainVerification {
                     // Wait for a few seconds
                     Thread.sleep(1000L);
 
-                    logger.info("Updating challenge...");
+                    logger.trace("Updating challenge...");
                     // Then update the status
                     challenge.update();
                 }
                 if (attempts == 0 && challenge.getStatus() != Status.VALID) {
-                    logger.info("All challenges exhausted, aborting.");
+                    logger.trace("All challenges exhausted, aborting.");
                     return false;
                 }
             } catch (InterruptedException ex) {
-                logger.info("Challenge interrupted, aborting.");
+                logger.trace("Challenge interrupted, aborting.");
                 return false;
             }
             return challenge.getStatus() == Status.VALID;
         } catch (AcmeException e) {
-            logger.info("Validation exception: " + e.getMessage(), e);
+            logger.trace("Validation exception: " + e.getMessage(), e);
             return false;
         }
     }
@@ -83,7 +83,7 @@ public class HttpDomainVerification {
                 new File(webroot + "/.well-known/acme-challenge").mkdirs();
                 File challengeFile = new File(webroot + "/.well-known/acme-challenge/" + httpChallenge.getToken());
                 try {
-                    logger.info("Creating challenge file: " + challengeFile.toString());
+                    logger.trace("Creating challenge file: " + challengeFile.toString());
                     challengeFile.createNewFile();
                     PrintWriter out = new PrintWriter(new FileWriter(challengeFile));
                     out.print(httpChallenge.getAuthorization());
@@ -94,12 +94,17 @@ public class HttpDomainVerification {
                     }
 
                 } catch (IOException e) {
-                    logger.info("IO exception while processing validation: " + e.getMessage(), e);
+                    logger.trace("IO exception while processing validation: " + e.getMessage(), e);
                     throw new RuntimeException(e);
                 } finally {
-                    challengeFile.delete();
-                    delete(webroot + "/.well-known/acme-challenge");
-                    delete(webroot + "/.well-known");
+                    try {
+                        challengeFile.delete();
+                        delete(webroot + "/.well-known/acme-challenge");
+                        delete(webroot + "/.well-known");
+                    } catch (Throwable e) {
+                        //If we can't remove it, so be it.
+                        logger.trace("Could not delete challenge file or directory at " + challengeFile.toString(), e);
+                    }
                 }
             }
         } catch (AcmeUnauthorizedException e) {

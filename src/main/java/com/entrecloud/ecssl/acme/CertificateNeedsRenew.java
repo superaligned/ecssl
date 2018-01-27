@@ -40,12 +40,13 @@ public class CertificateNeedsRenew {
                 logger.trace("Certificate will or has expired, regenerating...");
                 return true;
             }
+            logger.trace("Certificate does not expire within 30 days, no renew needed.");
             return false;
         } catch (FileNotFoundException e) {
-            logger.info("Certificate file not found, regenerating.");
+            logger.trace("Certificate file not found, regenerating.");
             return true;
         } catch (IOException e) {
-            logger.info("Exception while trying to load certificate file, regenerating.", e);
+            logger.trace("Exception while trying to load certificate file, regenerating.", e);
             return true;
         }
     }
